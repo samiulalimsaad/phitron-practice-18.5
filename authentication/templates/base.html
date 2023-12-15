@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+
+        <link
+            href="https://cdn.jsdelivr.net/npm/daisyui@4.4.20/dist/full.min.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body>
+        <div class="navbar bg-base-100">
+            <div class="flex-1">
+                <a class="btn btn-ghost text-xl">Authentication</a>
+            </div>
+            <div class="flex-none">
+                <ul class="menu menu-horizontal px-1">
+                    {% if is_authenticated %}
+                    <li><a>Profile</a></li>
+                    <li><a>Logout</a></li>
+                    {% else %}
+                    <li><a>Login</a></li>
+                    <li><a>Signup</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        {% block content %}{% endblock content %}
+    </body>
+</html>
