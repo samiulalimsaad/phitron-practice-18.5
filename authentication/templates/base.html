@@ -19,16 +19,31 @@
             </div>
             <div class="flex-none">
                 <ul class="menu menu-horizontal px-1">
-                    {% if is_authenticated %}
-                    <li><a>Profile</a></li>
-                    <li><a>Logout</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="/profile/">Profile</a></li>
+                    <li><a href="/logout/">Logout</a></li>
                     {% else %}
-                    <li><a>Login</a></li>
-                    <li><a>Signup</a></li>
+                    <li><a href="/login/">Login</a></li>
+                    <li><a href="/signup/">Signup</a></li>
                     {% endif %}
                 </ul>
             </div>
         </div>
-        {% block content %}{% endblock content %}
+
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li
+                {%if
+                message.tags%}
+                class="alert alert-{{ message.tags }}"
+                {%endif
+                %}
+            >
+                {{ message }}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %} {% block content %}{% endblock content %}
     </body>
 </html>
