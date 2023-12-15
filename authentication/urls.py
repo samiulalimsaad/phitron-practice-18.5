@@ -25,4 +25,10 @@ urlpatterns = [
     path("login/", views.user_login, name="login"),
     path("logout/", views.user_logout, name="logout"),
     path("signup/", views.register, name="signup"),
+    path("change-password/", views.change_password, name="change_password"),
+    path(
+        "change-password-without-old-password/",
+        views.change_password_without_old_password,
+        name="change_password_without_old_password",
+    ),
 ]
