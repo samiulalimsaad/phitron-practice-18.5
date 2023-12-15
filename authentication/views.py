@@ -1,11 +1,13 @@
-from django.contrib import messages  # Import the messages module
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.shortcuts import redirect, render
 
-from authentication.forms import RegistrationForm
+from authentication.forms import ChangePasswordForm, RegistrationForm
 
 
+@login_required(login_url="/login/")
 def home(req):
     return render(
         req,
@@ -58,3 +60,37 @@ def register(request):
         form = RegistrationForm()
 
     return render(request, "signup.html", {"form": form})
+
+
+@login_required(login_url="/login/")
+def change_password(request):
+    if request.method == "POST":
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(
+                request, user
+            )  # Update the session to avoid logout
+            messages.success(request, "Your password was successfully updated!")
+            return redirect(
+                "home"
+            )  # Redirect to the home page after successful password change
+    else:
+        form = PasswordChangeForm(request.user)
+
+    return render(request, "change_password.html", {"form": form})
+
+
+@login_required(login_url="/login/")
+def change_password_without_old_password(request):
+    if request.method == "POST":
+        form = ChangePasswordForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, "Your password was successfully updated!")
+            return redirect("home")
+    else:
+        form = ChangePasswordForm(request.user)
+
+    return render(request, "change_password_without_old_password.html", {"form": form})
